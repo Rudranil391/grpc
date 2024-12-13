@@ -1,0 +1,37 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: "0.0.0.0:4317"  # gRPC receiver for OTLP
+      http:
+        endpoint: "0.0.0.0:4318"   # HTTP receiver for OTLP
+
+exporters:
+  debug:  # Updated to use the debug exporter
+  # This will output received traces to the console for debugging purposes
+  # No additional configuration needed
+
+  otlp:
+    endpoint: "api.openobserve.ai:4317"  # gRPC endpoint for OpenObserve
+    headers:
+      Authorization: "Basic cnVkcmFuaWwxOTk2ZGFzZ3VwdGFAZ21haWwuY29tOjJjNjBUM0U4SGF2SzlRTjcxdDQ1"
+      organization: "rudranil_organization_50503_22FfMYY6kkH42f7"
+      stream-name: "default"
+    tls:
+      insecure: false  # Set to true if using self-signed certs
+
+  otlphttp:
+    endpoint: "https://api.openobserve.ai/api/rudranil_organization_50503_22FfMYY6kkH42f7"
+    headers:
+      Authorization: "Basic cnVkcmFuaWwxOTk2ZGFzZ3VwdGFAZ21haWwuY29tOjJjNjBUM0U4SGF2SzlRTjcxdDQ1"
+      organization: "rudranil_organization_50503_22FfMYY6kkH42f7"
+      stream-name: "default"
+    tls:
+      insecure: false  # Set to true if using self-signed certs
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: []  # Add any processors if needed
+      exporters: [debug, otlp, otlphttp]  # Exporting to debug and OpenObserve (OTLP)
